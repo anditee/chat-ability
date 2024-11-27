@@ -1,6 +1,6 @@
 {
   "name": "@anditee/chat-ability",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This React component library allows developers to seamlessly integrate an accessible chatbot into their website. Designed with inclusivity in mind, the library provides a customizable, user-friendly interface that adheres to modern accessibility standards.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
