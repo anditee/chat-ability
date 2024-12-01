@@ -1,0 +1,17 @@
+.ca-chat-button {
+    border-radius: 100%;
+    background: gray;
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    z-index: 9999;
+    bottom: 1rem;
+}
+
+.ca-chat-button.button-position-left {
+    left: 1rem;
+}
+
+.ca-chat-button.button-position-right {
+    right: 1rem;
+}

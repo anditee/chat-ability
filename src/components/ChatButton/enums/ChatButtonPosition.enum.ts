@@ -1,5 +1,5 @@
 export enum ChatButtonPosition {
-    LEFT = 'left',
-    RIGHT = 'right',
-    CENTER = 'center',
+    LEFT = 'button-position-left',
+    RIGHT = 'button-position-right',
+    CENTER = 'button-position-center',
 }
