@@ -42,8 +42,8 @@ export default [
     },
     {
         input: 'dist/cjs/types/src/index.d.ts',
-        output: [{ file: 'dist/index.d.ts', format: 'esm' }],
+        output: [{file: 'dist/index.d.ts', format: 'esm'}],
         plugins: [dts()],
-        external: [/\.scss$/],
+        external: [/\.css$/],
     },
 ]
