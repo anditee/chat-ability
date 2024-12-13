@@ -13,26 +13,10 @@ const ChatButtonComponent = (props: IChatButton) => {
 
     useEffect(() => {
         const handleAudioStream = async (stream: ReadableStream<Uint8Array>) => {
-            const audioContext = new AudioContext();
-
-            try {
-                const reader = stream.getReader();
-                const { value } = await reader.read();
-                if (value) {
-                    const audioBuffer = await audioContext.decodeAudioData(value.buffer as ArrayBuffer);
-                    const bufferSource = audioContext.createBufferSource();
-                    bufferSource.buffer = audioBuffer;
-                    bufferSource.connect(audioContext.destination);
-                    bufferSource.start();
-                }
-            } catch (error) {
-                console.warn("Falling back to native audio playback for unsupported formats.", error);
-
-                // Fallback: Native MP3-Wiedergabe
-                const audioElement = new Audio();
-                audioElement.src = URL.createObjectURL(new Blob([await streamToArrayBuffer(stream)], {type: "audio/mpeg"}));
-                await audioElement.play();
-            }
+            const audioElement = new Audio();
+            audioElement.src = URL.createObjectURL(new Blob([await streamToArrayBuffer(stream)], {type: "audio/mpeg"}));
+            document.body.append(audioElement);
+            //await audioElement.play();
         };
 
         const streamToArrayBuffer = async (stream: ReadableStream<Uint8Array>) => {
