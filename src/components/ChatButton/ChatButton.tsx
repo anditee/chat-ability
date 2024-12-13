@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 import {IChatButton} from "./interfaces/ChatButton.model";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faRobot} from "@fortawesome/free-solid-svg-icons";
@@ -10,13 +10,15 @@ const ChatButtonComponent = (props: IChatButton) => {
 
     const audioContextRef = useRef<AudioContext | null>(null);
     const sourceNodeRef = useRef<MediaStreamAudioSourceNode | null>(null);
+    const [audioElement, setAudioElement] = useState<HTMLAudioElement>();
+    const [didUserInteract, setDidUserInteract] = useState<boolean>(false);
+    const [didPlayInstructions, setDidPlayInstructions] = useState<boolean>(false);
 
     useEffect(() => {
         const handleAudioStream = async (stream: ReadableStream<Uint8Array>) => {
             const audioElement = new Audio();
             audioElement.src = URL.createObjectURL(new Blob([await streamToArrayBuffer(stream)], {type: "audio/mpeg"}));
-            document.body.append(audioElement);
-            //await audioElement.play();
+            setAudioElement(audioElement);
         };
 
         const streamToArrayBuffer = async (stream: ReadableStream<Uint8Array>) => {
@@ -38,7 +40,7 @@ const ChatButtonComponent = (props: IChatButton) => {
             const response = await openai.audio.speech.create({
                 model: "tts-1",
                 voice: "alloy",
-                input: "Today is a wonderful day to build something people love!",
+                input: props.accessibilityText,
             });
 
             if (response.body) {
@@ -48,6 +50,21 @@ const ChatButtonComponent = (props: IChatButton) => {
         }
         tts();
     }, [props.accessibilityText]);
+
+    useEffect(() => {
+        window.addEventListener('click', () => {
+            setDidUserInteract(true);
+        });
+
+    }, []);
+
+    useEffect(() => {
+        if (audioElement && !didPlayInstructions) {
+            audioElement.play().then(() => {
+                setDidPlayInstructions(true);
+            });
+        }
+    }, [didUserInteract])
 
     const getButtonPosition = () => {
         return props.buttonPosition;
