@@ -1,26 +1,66 @@
 import * as React from "react";
-import {useEffect} from "react";
+import {useEffect, useRef} from "react";
 import {IChatButton} from "./interfaces/ChatButton.model";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faRobot} from "@fortawesome/free-solid-svg-icons";
 import './ChatButton.css';
 import OpenAI from "openai";
-import AudioPlayerFromStream from "./helpers/StreamAudio";
 
 const ChatButtonComponent = (props: IChatButton) => {
 
-    useEffect(() => {
-        const tts = async () => {
-            const openai = new OpenAI({ apiKey: 'sk-svcacct-ECrbLVbnY4YCnjcq3X_KUZhpzv3wP86XB2eXhvNsSNb6_1LrvfcqWlrHaeZvSnAy58qgPRT3BlbkFJJc23BWnQVmz3Pn15rTbB5GiIEliEbGJ_oqwkGRDu-ZDPNWpwFx8nNGVSyCNkFFOgymOpwA', dangerouslyAllowBrowser: true });
+    const audioContextRef = useRef<AudioContext | null>(null);
+    const sourceNodeRef = useRef<MediaStreamAudioSourceNode | null>(null);
 
-            const mp3 = await openai.audio.speech.create({
+    useEffect(() => {
+        const handleAudioStream = async (stream: ReadableStream<Uint8Array>) => {
+            const audioContext = new AudioContext();
+
+            try {
+                const reader = stream.getReader();
+                const { value } = await reader.read();
+                if (value) {
+                    const audioBuffer = await audioContext.decodeAudioData(value.buffer as ArrayBuffer);
+                    const bufferSource = audioContext.createBufferSource();
+                    bufferSource.buffer = audioBuffer;
+                    bufferSource.connect(audioContext.destination);
+                    bufferSource.start();
+                }
+            } catch (error) {
+                console.warn("Falling back to native audio playback for unsupported formats.", error);
+
+                // Fallback: Native MP3-Wiedergabe
+                const audioElement = new Audio();
+                audioElement.src = URL.createObjectURL(new Blob([await streamToArrayBuffer(stream)], {type: "audio/mpeg"}));
+                await audioElement.play();
+            }
+        };
+
+        const streamToArrayBuffer = async (stream: ReadableStream<Uint8Array>) => {
+            const chunks: Uint8Array[] = [];
+            const reader = stream.getReader();
+            let result;
+            while (!(result = await reader.read()).done) {
+                chunks.push(result.value);
+            }
+            return new Blob(chunks).arrayBuffer();
+        };
+
+        const tts = async () => {
+            const openai = new OpenAI({
+                apiKey: 'sk-svcacct-ECrbLVbnY4YCnjcq3X_KUZhpzv3wP86XB2eXhvNsSNb6_1LrvfcqWlrHaeZvSnAy58qgPRT3BlbkFJJc23BWnQVmz3Pn15rTbB5GiIEliEbGJ_oqwkGRDu-ZDPNWpwFx8nNGVSyCNkFFOgymOpwA',
+                dangerouslyAllowBrowser: true
+            });
+
+            const response = await openai.audio.speech.create({
                 model: "tts-1",
                 voice: "alloy",
                 input: "Today is a wonderful day to build something people love!",
             });
 
-            // @ts-ignore
-            AudioPlayerFromStream(mp3.body);
+            if (response.body) {
+                const audioStream = response.body;
+                await handleAudioStream(audioStream);
+            }
         }
         tts();
     }, [props.accessibilityText]);
