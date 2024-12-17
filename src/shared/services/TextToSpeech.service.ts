@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import {environment} from "../../environment";
+import {environment} from "../../../environment";
 
 class TextToSpeechService {
     async handleAudioStream(stream: ReadableStream<Uint8Array>){
