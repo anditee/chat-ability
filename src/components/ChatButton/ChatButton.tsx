@@ -16,9 +16,9 @@ const ChatButtonComponent = (props: IChatButton) => {
 
     useEffect(() => {
         const tts = new TextToSpeechService();
-        /*tts.getSpeechByText(props.accessibilityText).then(audioElement => {
+        tts.getSpeechByText(props.accessibilityText).then(audioElement => {
             setAudioElement(audioElement);
-        });*/
+        });
     }, [props.accessibilityText]);
 
     useEffect(() => {
