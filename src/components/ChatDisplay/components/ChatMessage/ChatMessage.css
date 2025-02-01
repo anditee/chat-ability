@@ -1,0 +1,21 @@
+.chat-message {
+    display: flex;
+    gap: 2rem;
+}
+
+.chat-message .icon {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    border-radius: 100%;
+}
+
+.chat-message.right .icon {
+    order: 2;
+}
+
+.chat-message .content {
+    padding: 2rem;
+    border-radius: 0.5rem;
+    background: #fff;
+}

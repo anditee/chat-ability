@@ -9,6 +9,8 @@ import peerDepsExternal from 'rollup-plugin-peer-deps-external'
 
 import packageJson from "./package.json" assert {type: "json"};
 import scss from "rollup-plugin-scss";
+import copy from "rollup-plugin-copy";
+import url from "@rollup/plugin-url";
 
 export default [
     {
@@ -37,6 +39,15 @@ export default [
             terser(),
             scss({
                 output: 'dist/bundle.css',
+            }),
+            copy({
+                targets: [
+                    { src: "src/assets/images/*", dest: "dist/assets/images" },
+                ],
+            }),
+            url({
+                include: ["**/*.png", "**/*.jpg", "**/*.jpeg", "**/*.svg"], // Bilddateien verarbeiten
+                limit: 0, // Erzwingt URL statt Base64
             }),
         ],
     },
