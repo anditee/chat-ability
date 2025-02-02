@@ -3,6 +3,10 @@
     gap: 2rem;
 }
 
+.chat-message.right {
+    align-self: flex-end;
+}
+
 .chat-message .icon {
     width: 100px;
     height: 100px;
@@ -15,7 +19,12 @@
 }
 
 .chat-message .content {
-    padding: 2rem;
+    padding: 1rem;
     border-radius: 0.5rem;
-    background: #fff;
+    background: #6a6a8e;
+    color: #fff;
+}
+
+.chat-message.right .content {
+    background: #4a90e2;
 }

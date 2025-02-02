@@ -1,14 +1,27 @@
 import OpenAI from "openai";
 import {environment} from "../../../environment";
+import {useState} from "react";
 
 class TextToSpeechService {
-    async handleAudioStream(stream: ReadableStream<Uint8Array>){
+    private audioElement: HTMLAudioElement | undefined;
+
+    setAudioElement(audioElement: HTMLAudioElement | undefined) {
+        this.audioElement = audioElement;
+    }
+
+    async playAudio() {
+        if (this.audioElement) {
+            return this.audioElement.play();
+        }
+    }
+
+    async handleAudioStream(stream: ReadableStream<Uint8Array>) {
         const audioElement = new Audio();
         audioElement.src = URL.createObjectURL(new Blob([await this.streamToArrayBuffer(stream)], {type: "audio/mpeg"}));
         return audioElement;
     }
 
-    async streamToArrayBuffer(stream: ReadableStream<Uint8Array>){
+    async streamToArrayBuffer(stream: ReadableStream<Uint8Array>) {
         const chunks: Uint8Array[] = [];
         const reader = stream.getReader();
         let result;
@@ -18,7 +31,7 @@ class TextToSpeechService {
         return new Blob(chunks).arrayBuffer();
     }
 
-    async getSpeechByText(text: string){
+    async getSpeechByText(text: string) {
         const openai = new OpenAI({
             apiKey: environment.apiKey,
             dangerouslyAllowBrowser: true

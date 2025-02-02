@@ -9,31 +9,33 @@ import RecordService from "../../shared/services/Record.service";
 
 const ChatButtonComponent = (props: IChatButton) => {
 
-    const [audioElement, setAudioElement] = useState<HTMLAudioElement>();
     const [didUserInteract, setDidUserInteract] = useState<boolean>(false);
     const [didPlayInstructions, setDidPlayInstructions] = useState<boolean>(false);
-    const [recordService, setRecordService] = useState<RecordService>();
+    const [audioElementSet, setAudioElementSet] = useState<boolean>(false);
+    const [tts] = useState<TextToSpeechService>(new TextToSpeechService());
 
     useEffect(() => {
-        const tts = new TextToSpeechService();
         tts.getSpeechByText(props.accessibilityText).then(audioElement => {
-            setAudioElement(audioElement);
+            tts.setAudioElement(audioElement);
+            setAudioElementSet(true);
         });
     }, [props.accessibilityText]);
 
     useEffect(() => {
-        window.addEventListener('click', () => {
-            setDidUserInteract(true);
-        });
-    }, []);
+        if(audioElementSet) {
+            window.addEventListener('click', () => {
+                setDidUserInteract(true);
+            });
+        }
+    }, [audioElementSet]);
 
     useEffect(() => {
-        if (audioElement && !didPlayInstructions) {
-            audioElement.play().then(() => {
+        if (didUserInteract && !didPlayInstructions) {
+            tts.playAudio().then(() => {
                 setDidPlayInstructions(true);
             });
         }
-    }, [didUserInteract]);
+    }, [didUserInteract, didPlayInstructions]);
 
     useEffect(() => {
         const rs = new RecordService();
@@ -42,7 +44,6 @@ const ChatButtonComponent = (props: IChatButton) => {
         window.addEventListener('keydown', (event) => {
             if (event.code === 'Space' && !isRecording) {
                 isRecording = true;
-                console.log('start');
                 event.preventDefault();
                 rs.startRecording().then();
             }
