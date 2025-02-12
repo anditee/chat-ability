@@ -15,7 +15,12 @@ const ChatControl = (control: IChatControl) => {
     }, [control.alternativeDescription]);
 
     return <>
-        <div tabIndex={0} className={["chat-control"].join(' ')} onClick={() => tts.playAudio()}>
+        <div tabIndex={0} className={["chat-control"].join(' ')} onClick={() => {
+            tts.playAudio();
+            if (control.onClick) {
+                control.onClick();
+            }
+        }}>
             {control.children}
         </div>
     </>;
