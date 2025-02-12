@@ -1,16 +1,20 @@
 import OpenAI from "openai";
 import {environment} from "../../../environment";
-import {useState} from "react";
 
 class TextToSpeechService {
     private audioElement: HTMLAudioElement | undefined;
+    private disabled: boolean = false;
 
     setAudioElement(audioElement: HTMLAudioElement | undefined) {
         this.audioElement = audioElement;
     }
 
+    invertDisabled() {
+        this.disabled = !this.disabled;
+    }
+
     async playAudio() {
-        if (this.audioElement) {
+        if (this.audioElement && !this.disabled) {
             return this.audioElement.play();
         }
     }
@@ -39,7 +43,7 @@ class TextToSpeechService {
 
         const response = await openai.audio.speech.create({
             model: "tts-1",
-            voice: "alloy",
+            voice: "nova",
             input: text,
         });
 

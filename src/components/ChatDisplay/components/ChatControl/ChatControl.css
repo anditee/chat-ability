@@ -1,0 +1,30 @@
+.chat-message {
+    display: flex;
+    gap: 2rem;
+}
+
+.chat-message.right {
+    align-self: flex-end;
+}
+
+.chat-message .icon {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    border-radius: 100%;
+}
+
+.chat-message.right .icon {
+    order: 2;
+}
+
+.chat-message .content {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background: #6a6a8e;
+    color: #fff;
+}
+
+.chat-message.right .content {
+    background: #4a90e2;
+}

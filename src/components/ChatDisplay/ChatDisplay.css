@@ -33,8 +33,19 @@
     justify-content: space-between;
     flex-direction: column;
     padding: 2rem;
+    border-bottom: 1px dashed #fff;
 }
 
-.message-group .message + .message {
+.message-group .chat-message + .chat-message {
+    margin-top: 2rem;
+}
 
+.chat-display .header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.chat-display .header .controls {
+    display: flex;
+    gap: 2rem;
 }

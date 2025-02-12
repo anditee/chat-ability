@@ -1,13 +1,25 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
-import {IChatDisplay} from "./interfaces/ChatButton.model";
+import {IChatDisplay} from "./interfaces/ChatDisplay.model";
 import './ChatDisplay.css';
 import ChatMessageComponent from "./components/ChatMessage";
 import {IMessage, IMessagePosition, IMessageType} from "../../shared/interfaces/Message.model";
+import ChatControl from "./components/ChatControl";
+import {
+    faDownLeftAndUpRightToCenter,
+    faRobot,
+    faTextHeight,
+    faTextSlash, faUpRightAndDownLeftFromCenter,
+    faVolumeMute
+} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faQuestionCircle} from "@fortawesome/free-regular-svg-icons";
+import TextToSpeechService from "../../shared/services/TextToSpeech.service";
 
 const ChatDisplayComponent = (props: IChatDisplay) => {
 
     const [messageGroup, setMessageGroup] = useState<IMessage[][]>([]);
+    const [tts] = useState<TextToSpeechService>(new TextToSpeechService());
 
     useEffect(() => {
         setMessageGroup(
@@ -63,7 +75,23 @@ const ChatDisplayComponent = (props: IChatDisplay) => {
         <div className={"chat-display"}>
             <div className={"chat"}>
                 <div className={"header"}>
-                    Chatbot
+                    <div className={"healdine"}>
+                        Chatbot
+                    </div>
+                    <div className={"controls"}>
+                        <ChatControl alternativeDescription={'Textgröße verkleinern'}>
+                            <FontAwesomeIcon icon={faDownLeftAndUpRightToCenter}/>
+                        </ChatControl>
+                        <ChatControl alternativeDescription={'Textgröße vergrößern'}>
+                            <FontAwesomeIcon icon={faUpRightAndDownLeftFromCenter}/>
+                        </ChatControl>
+                        <ChatControl alternativeDescription={'Stummschalten'} onClick={() => tts.invertDisabled()}>
+                            <FontAwesomeIcon icon={faVolumeMute}/>
+                        </ChatControl>
+                        <ChatControl alternativeDescription={'Tutorial'} >
+                            <FontAwesomeIcon icon={faQuestionCircle}/>
+                        </ChatControl>
+                    </div>
                 </div>
                 <div className={"inner-container"}>
                     {messageGroup.map(messageGroup => (
