@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {IChatDisplay} from "./interfaces/ChatDisplay.model";
 import './ChatDisplay.css';
 import ChatMessageComponent from "./components/ChatMessage";
@@ -7,19 +7,20 @@ import {IMessage, IMessagePosition, IMessageType} from "../../shared/interfaces/
 import ChatControl from "./components/ChatControl";
 import {
     faDownLeftAndUpRightToCenter,
-    faRobot,
-    faTextHeight,
-    faTextSlash, faUpRightAndDownLeftFromCenter,
-    faVolumeMute
+    faUpRightAndDownLeftFromCenter,
+    faVolumeHigh,
+    faVolumeMute, IconDefinition
 } from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faQuestionCircle} from "@fortawesome/free-regular-svg-icons";
-import TextToSpeechService from "../../shared/services/TextToSpeech.service";
+import {v4 as uuidv4} from 'uuid';
+import {MuteState} from "../../shared/enums/MuteState.enum";
 
 const ChatDisplayComponent = (props: IChatDisplay) => {
 
     const [messageGroup, setMessageGroup] = useState<IMessage[][]>([]);
-    const [tts] = useState<TextToSpeechService>(new TextToSpeechService());
+    const [muteIcon, setMuteIcon] = useState<IconDefinition>(faVolumeMute);
+    const [muteText, setMuteText] = useState<string>('Sprachausgabe deaktiviert');
 
     useEffect(() => {
         setMessageGroup(
@@ -71,6 +72,20 @@ const ChatDisplayComponent = (props: IChatDisplay) => {
         )
     }, []);
 
+    const disableOrEnableTts = useCallback(() => {
+        const currentMuteState = localStorage.getItem('mute') ?? MuteState.UNMUTED;
+
+        if (currentMuteState && currentMuteState === MuteState.UNMUTED) {
+            localStorage.setItem('mute', MuteState.MUTED);
+            setMuteIcon(faVolumeHigh);
+            setMuteText('Sprachausgabe aktiviert');
+        } else {
+            localStorage.setItem('mute', MuteState.UNMUTED);
+            setMuteIcon(faVolumeMute);
+            setMuteText('Sprachausgabe deaktiviert');
+        }
+    }, []);
+
     return <>
         <div className={"chat-display"}>
             <div className={"chat"}>
@@ -79,28 +94,29 @@ const ChatDisplayComponent = (props: IChatDisplay) => {
                         Chatbot
                     </div>
                     <div className={"controls"}>
-                        <ChatControl alternativeDescription={'Textgröße verkleinern'}>
+                        <ChatControl alternativeDescription={'Textgröße verkleinert'} key={uuidv4()}>
                             <FontAwesomeIcon icon={faDownLeftAndUpRightToCenter}/>
                         </ChatControl>
-                        <ChatControl alternativeDescription={'Textgröße vergrößern'}>
+                        <ChatControl alternativeDescription={'Textgröße vergrößert'} key={uuidv4()}>
                             <FontAwesomeIcon icon={faUpRightAndDownLeftFromCenter}/>
                         </ChatControl>
-                        <ChatControl alternativeDescription={'Stummschalten'} onClick={() => tts.invertDisabled()}>
-                            <FontAwesomeIcon icon={faVolumeMute}/>
+                        <ChatControl alternativeDescription={muteText} onClick={() => disableOrEnableTts()} key={uuidv4()}>
+                            <FontAwesomeIcon icon={muteIcon}/>
                         </ChatControl>
-                        <ChatControl alternativeDescription={'Tutorial'} >
+                        <ChatControl alternativeDescription={'Tutorial'} key={uuidv4()}>
                             <FontAwesomeIcon icon={faQuestionCircle}/>
                         </ChatControl>
                     </div>
                 </div>
-                <div className={"inner-container"}>
+                <div className={"inner-container"} key={uuidv4()}>
                     {messageGroup.map(messageGroup => (
-                        <div className={"message-group"}>
+                        <div className={"message-group"} key={uuidv4()}>
                             {messageGroup.map(message => (
                                 <ChatMessageComponent
                                     content={message.content}
                                     type={message.type}
-                                    position={message.position}>
+                                    position={message.position}
+                                    key={uuidv4()}>
                                 </ChatMessageComponent>
                             ))}
                         </div>

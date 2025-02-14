@@ -1,20 +1,18 @@
 import OpenAI from "openai";
 import {environment} from "../../../environment";
+import {MuteState} from "../enums/MuteState.enum";
 
 class TextToSpeechService {
     private audioElement: HTMLAudioElement | undefined;
-    private disabled: boolean = false;
 
     setAudioElement(audioElement: HTMLAudioElement | undefined) {
         this.audioElement = audioElement;
     }
 
-    invertDisabled() {
-        this.disabled = !this.disabled;
-    }
-
     async playAudio() {
-        if (this.audioElement && !this.disabled) {
+        const currentMuteState = localStorage.getItem('mute') ?? MuteState.UNMUTED;
+        const disabled = currentMuteState === MuteState.MUTED;
+        if (this.audioElement && !disabled) {
             return this.audioElement.play();
         }
     }

@@ -16,10 +16,10 @@ const ChatControl = (control: IChatControl) => {
 
     return <>
         <div tabIndex={0} className={["chat-control"].join(' ')} onClick={() => {
-            tts.playAudio();
             if (control.onClick) {
                 control.onClick();
             }
+            tts.playAudio();
         }}>
             {control.children}
         </div>

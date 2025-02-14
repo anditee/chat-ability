@@ -62,7 +62,6 @@ class RecordService {
                     model: "whisper-1",
                     response_format: "text",
                 }).then(response => {
-                    console.log(response);
                 });
             };
 

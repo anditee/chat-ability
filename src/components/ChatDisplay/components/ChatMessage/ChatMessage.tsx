@@ -4,7 +4,6 @@ import './ChatMessage.css';
 import {IMessage, IMessagePosition, IMessageType} from "../../../../shared/interfaces/Message.model";
 import aiImage from '../../../../assets/images/ai_profile_picture.png';
 import userImage from '../../../../assets/images/profile_picture.png';
-import textToSpeechService from "../../../../shared/services/TextToSpeech.service";
 import TextToSpeechService from "../../../../shared/services/TextToSpeech.service";
 
 const ChatMessageComponent = (message: IMessage) => {
@@ -18,7 +17,6 @@ const ChatMessageComponent = (message: IMessage) => {
         if (message.type === IMessageType.REQUEST) {
             setImgSrc(userImage.src);
             setAlternativeDescription('Ihre Anfrage');
-            console.log(alternativeDescription);
             setPosition(IMessagePosition.RIGHT);
         }
 

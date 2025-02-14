@@ -51,10 +51,8 @@ const ChatButtonComponent = (props: IChatButton) => {
 
         window.addEventListener('keyup', (event) => {
             if (event.code === 'Space' && isRecording) {
-                console.log('stop');
                 event.preventDefault();
                 rs.endRecording().then(() => {
-                    console.log('stopped')
                 });
                 isRecording = false;
             }
