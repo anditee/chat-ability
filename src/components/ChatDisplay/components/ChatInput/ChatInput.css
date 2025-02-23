@@ -1,0 +1,28 @@
+.chat-input {
+    display: flex;
+    gap: 2rem;
+}
+
+.chat-input input {
+    width: 100%;
+    background: none;
+    padding: 0.2rem 1rem;
+    background:#6a6a8e;
+    border-radius: 2rem;
+    color: #fff;
+}
+
+.chat-input .chat-control {
+    background: #6a6a8e;
+    padding: 0.5rem;
+    border-radius: 100%;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.chat-input .chat-control svg {
+    line-height: 40px;
+    color: #fff;
+}

@@ -9,12 +9,15 @@ import {
     faDownLeftAndUpRightToCenter,
     faUpRightAndDownLeftFromCenter,
     faVolumeHigh,
-    faVolumeMute, IconDefinition
+    faVolumeMute,
+    IconDefinition
 } from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faQuestionCircle} from "@fortawesome/free-regular-svg-icons";
 import {v4 as uuidv4} from 'uuid';
 import {MuteState} from "../../shared/enums/MuteState.enum";
+import {ViewState} from "../../shared/enums/ViewState.enum";
+import ChatInput from "./components/ChatInput";
 
 const ChatDisplayComponent = (props: IChatDisplay) => {
 
@@ -87,7 +90,7 @@ const ChatDisplayComponent = (props: IChatDisplay) => {
     }, []);
 
     return <>
-        <div className={"chat-display"}>
+        <div className={["chat-display", props.show ? ViewState.SHOW : ViewState.HIDE].join(' ')}>
             <div className={"chat"}>
                 <div className={"header"}>
                     <div className={"healdine"}>
@@ -123,7 +126,7 @@ const ChatDisplayComponent = (props: IChatDisplay) => {
                     ))}
                 </div>
                 <div className={"footer"}>
-
+                    <ChatInput></ChatInput>
                 </div>
             </div>
         </div>

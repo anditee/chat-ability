@@ -1,17 +1,18 @@
 import * as React from "react";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import {IChatButton} from "./interfaces/ChatButton.model";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faRobot} from "@fortawesome/free-solid-svg-icons";
 import './ChatButton.css';
 import TextToSpeechService from "../../shared/services/TextToSpeech.service";
-import RecordService from "../../shared/services/Record.service";
+import ChatDisplay from "../ChatDisplay";
 
 const ChatButtonComponent = (props: IChatButton) => {
 
     const [didUserInteract, setDidUserInteract] = useState<boolean>(false);
     const [didPlayInstructions, setDidPlayInstructions] = useState<boolean>(false);
     const [audioElementSet, setAudioElementSet] = useState<boolean>(false);
+    const [showChatDisplay, setShowChatDisplay] = useState<boolean>(false);
     const [tts] = useState<TextToSpeechService>(new TextToSpeechService());
 
     useEffect(() => {
@@ -22,7 +23,7 @@ const ChatButtonComponent = (props: IChatButton) => {
     }, [props.accessibilityText]);
 
     useEffect(() => {
-        if(audioElementSet) {
+        if (audioElementSet) {
             window.addEventListener('click', () => {
                 setDidUserInteract(true);
             });
@@ -38,26 +39,14 @@ const ChatButtonComponent = (props: IChatButton) => {
     }, [didUserInteract, didPlayInstructions]);
 
     useEffect(() => {
-        const rs = new RecordService();
-        let isRecording = false;
-
-        window.addEventListener('keydown', (event) => {
-            if (event.code === 'Space' && !isRecording) {
-                isRecording = true;
-                event.preventDefault();
-                rs.startRecording().then();
+        // register keydown event on load of view service
+        window.addEventListener('keydown', function (event) {
+            // check for set trigger key keydown
+            if (event.key === props.triggerKey) {
+                setShowChatDisplay(!showChatDisplay);
             }
         });
-
-        window.addEventListener('keyup', (event) => {
-            if (event.code === 'Space' && isRecording) {
-                event.preventDefault();
-                rs.endRecording().then(() => {
-                });
-                isRecording = false;
-            }
-        });
-    }, []);
+    }, [props.triggerKey, showChatDisplay]);
 
     const getButtonPosition = () => {
         return props.buttonPosition;
@@ -66,6 +55,7 @@ const ChatButtonComponent = (props: IChatButton) => {
     const classes = `ca-chat-button ${getButtonPosition()}`
 
     return <>
+        <ChatDisplay messages={[]} show={showChatDisplay}></ChatDisplay>
         <button className={classes}>
             <FontAwesomeIcon icon={faRobot}/>
         </button>

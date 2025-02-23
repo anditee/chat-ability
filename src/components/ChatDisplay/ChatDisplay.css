@@ -3,8 +3,12 @@
     height: 100%;
     position: absolute;
     background: dimgrey;
-    display: flex;
+    display: none;
     flex-direction: column;
+}
+
+.chat-display.show {
+    display: flex;
 }
 
 .chat-display .inner-container {
@@ -25,6 +29,8 @@
     padding: 0.5rem;
     background: #3b3b4f;
     color: #fff;
+    position: sticky;
+    top: 0;
 }
 
 .message-group {
@@ -48,4 +54,11 @@
 .chat-display .header .controls {
     display: flex;
     gap: 2rem;
+}
+
+.chat-display .footer {
+    position: sticky;
+    bottom: 0;
+    padding: 1rem 2rem;
+    background: #2a2a3a;
 }

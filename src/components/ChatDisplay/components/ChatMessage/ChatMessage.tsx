@@ -19,18 +19,25 @@ const ChatMessageComponent = (message: IMessage) => {
             setAlternativeDescription('Ihre Anfrage');
             setPosition(IMessagePosition.RIGHT);
         }
+    }, [message.type]);
 
+    const generateAndPlayAudio = useCallback(() => {
         tts.getSpeechByText(generateSpeechText()).then(audioElement => {
             tts.setAudioElement(audioElement);
+            tts.playAudio().then();
         });
-    }, [message.type, message.content, alternativeDescription]);
+    }, [message.content, alternativeDescription]);
 
     const generateSpeechText = useCallback(() => {
         return alternativeDescription + " " + message.content;
     }, [alternativeDescription]);
 
     return <>
-        <div className={["chat-message", position].join(' ')} onClick={() => tts.playAudio()}>
+        <div
+            tabIndex={0}
+            className={["chat-message", position].join(' ')}
+            onClick={() => generateAndPlayAudio()}
+            onKeyDown={e => e.key === 'Enter' ? generateAndPlayAudio() : ''}>
             <div className={"icon"}>
                 <img src={imgSrc} alt={alternativeDescription}/>
             </div>
