@@ -18,12 +18,15 @@ import {v4 as uuidv4} from 'uuid';
 import {MuteState} from "../../shared/enums/MuteState.enum";
 import {ViewState} from "../../shared/enums/ViewState.enum";
 import ChatInput from "./components/ChatInput";
+import {decreaseFontSize, fontSize, increaseFontSize} from "../../shared/signals/FontSize.signal";
+import {useSignalEffect} from "@preact/signals-react";
 
 const ChatDisplayComponent = (props: IChatDisplay) => {
 
     const [messageGroup, setMessageGroup] = useState<IMessage[][]>([]);
     const [muteIcon, setMuteIcon] = useState<IconDefinition>(faVolumeMute);
     const [muteText, setMuteText] = useState<string>('Sprachausgabe deaktiviert');
+    const [localFontSize, setLocalFontSize] = useState<number>(0);
 
     useEffect(() => {
         setMessageGroup(
@@ -89,24 +92,39 @@ const ChatDisplayComponent = (props: IChatDisplay) => {
         }
     }, []);
 
+    useSignalEffect(() => {
+        setLocalFontSize(fontSize.value);
+    });
+
     return <>
-        <div className={["chat-display", props.show ? ViewState.SHOW : ViewState.HIDE].join(' ')}>
+        <div className={["chat-display", props.show ? ViewState.SHOW : ViewState.HIDE].join(' ')} style={{ fontSize: `${localFontSize}rem` }}>
             <div className={"chat"}>
                 <div className={"header"}>
-                    <div className={"healdine"}>
+                    <div className={"headline"}>
                         Chatbot
                     </div>
                     <div className={"controls"}>
-                        <ChatControl alternativeDescription={'Textgröße verkleinert'} key={uuidv4()}>
+                        <ChatControl
+                            alternativeDescription={'Textgröße verkleinert'}
+                            key={uuidv4()}
+                            onClick={() => decreaseFontSize()}>
                             <FontAwesomeIcon icon={faDownLeftAndUpRightToCenter}/>
                         </ChatControl>
-                        <ChatControl alternativeDescription={'Textgröße vergrößert'} key={uuidv4()}>
+                        <ChatControl
+                            alternativeDescription={'Textgröße vergrößert'}
+                            key={uuidv4()}
+                            onClick={() => increaseFontSize()}>
                             <FontAwesomeIcon icon={faUpRightAndDownLeftFromCenter}/>
                         </ChatControl>
-                        <ChatControl alternativeDescription={muteText} onClick={() => disableOrEnableTts()} key={uuidv4()}>
+                        <ChatControl
+                            alternativeDescription={muteText}
+                            onClick={() => disableOrEnableTts()}
+                            key={uuidv4()}>
                             <FontAwesomeIcon icon={muteIcon}/>
                         </ChatControl>
-                        <ChatControl alternativeDescription={'Tutorial'} key={uuidv4()}>
+                        <ChatControl
+                            alternativeDescription={'Tutorial'}
+                            key={uuidv4()}>
                             <FontAwesomeIcon icon={faQuestionCircle}/>
                         </ChatControl>
                     </div>
