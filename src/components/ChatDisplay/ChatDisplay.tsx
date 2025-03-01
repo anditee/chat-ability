@@ -20,6 +20,10 @@ import {ViewState} from "../../shared/enums/ViewState.enum";
 import ChatInput from "./components/ChatInput";
 import {decreaseFontSize, fontSize, increaseFontSize} from "../../shared/signals/FontSize.signal";
 import {useSignalEffect} from "@preact/signals-react";
+import {showChat} from "../../shared/signals/ShowChat.signal";
+import Tutorial from "../Tutorial/Tutorial";
+import {generateDefaultTutorial} from "../Tutorial/helpers/generateDefaultTutorial.helper";
+import {showOrHideTutorial, showTutorial} from "../../shared/signals/Tutorial.signal";
 
 const ChatDisplayComponent = (props: IChatDisplay) => {
 
@@ -27,6 +31,8 @@ const ChatDisplayComponent = (props: IChatDisplay) => {
     const [muteIcon, setMuteIcon] = useState<IconDefinition>(faVolumeMute);
     const [muteText, setMuteText] = useState<string>('Sprachausgabe deaktiviert');
     const [localFontSize, setLocalFontSize] = useState<number>(0);
+    const [showChatValue, setShowChatValue] = useState<boolean>(false);
+    const [showTutorialValue, setShowTutorialValue] = useState<boolean>(false);
 
     useEffect(() => {
         setMessageGroup(
@@ -94,10 +100,14 @@ const ChatDisplayComponent = (props: IChatDisplay) => {
 
     useSignalEffect(() => {
         setLocalFontSize(fontSize.value);
+        setShowChatValue(showChat.value);
+        setShowTutorialValue(showTutorial.value);
     });
 
     return <>
-        <div className={["chat-display", props.show ? ViewState.SHOW : ViewState.HIDE].join(' ')} style={{ fontSize: `${localFontSize}rem` }}>
+        <div
+            className={["chat-display", showChatValue ? ViewState.SHOW : ViewState.HIDE].join(' ')}
+            style={{fontSize: `${localFontSize} rem`}}>
             <div className={"chat"}>
                 <div className={"header"}>
                     <div className={"headline"}>
@@ -124,6 +134,7 @@ const ChatDisplayComponent = (props: IChatDisplay) => {
                         </ChatControl>
                         <ChatControl
                             alternativeDescription={'Tutorial'}
+                            onClick={() => showOrHideTutorial()}
                             key={uuidv4()}>
                             <FontAwesomeIcon icon={faQuestionCircle}/>
                         </ChatControl>
@@ -148,6 +159,10 @@ const ChatDisplayComponent = (props: IChatDisplay) => {
                 </div>
             </div>
         </div>
+        {showTutorialValue ?
+            <Tutorial steps={generateDefaultTutorial()}></Tutorial>
+            : ''
+        }
     </>;
 }
 

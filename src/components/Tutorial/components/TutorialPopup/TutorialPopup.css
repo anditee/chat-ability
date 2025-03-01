@@ -1,0 +1,8 @@
+.tutorial-popup {
+    position: absolute;
+    bottom: 2rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    background: #2a2a3a;
+    margin: 0 auto;
+}

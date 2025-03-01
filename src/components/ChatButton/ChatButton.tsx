@@ -6,13 +6,13 @@ import {faRobot} from "@fortawesome/free-solid-svg-icons";
 import './ChatButton.css';
 import TextToSpeechService from "../../shared/services/TextToSpeech.service";
 import ChatDisplay from "../ChatDisplay";
+import {showOrHideChat} from "../../shared/signals/ShowChat.signal";
 
 const ChatButtonComponent = (props: IChatButton) => {
 
     const [didUserInteract, setDidUserInteract] = useState<boolean>(false);
     const [didPlayInstructions, setDidPlayInstructions] = useState<boolean>(false);
     const [audioElementSet, setAudioElementSet] = useState<boolean>(false);
-    const [showChatDisplay, setShowChatDisplay] = useState<boolean>(false);
     const [tts] = useState<TextToSpeechService>(new TextToSpeechService());
 
     useEffect(() => {
@@ -43,10 +43,10 @@ const ChatButtonComponent = (props: IChatButton) => {
         window.addEventListener('keydown', function (event) {
             // check for set trigger key keydown
             if (event.key === props.triggerKey) {
-                setShowChatDisplay(!showChatDisplay);
+                showOrHideChat();
             }
         });
-    }, [props.triggerKey, showChatDisplay]);
+    }, [props.triggerKey]);
 
     const getButtonPosition = () => {
         return props.buttonPosition;
@@ -55,7 +55,6 @@ const ChatButtonComponent = (props: IChatButton) => {
     const classes = `ca-chat-button ${getButtonPosition()}`
 
     return <>
-        <ChatDisplay messages={[]} show={showChatDisplay}></ChatDisplay>
         <button className={classes}>
             <FontAwesomeIcon icon={faRobot}/>
         </button>
