@@ -7,22 +7,22 @@ import "./Tutorial.css";
 
 const TutorialComponent = (tutorialPopup: ITutorial) => {
 
-    const [currentTutorialStep, setCurrentTutorialStep] = useState<number>(0);
-
-    useEffect(() => {
-        setCurrentTutorialLength(tutorialPopup.steps.length);
-    }, []);
+    const [currentTutorialStep, setCurrentTutorialStep] = useState<number>(currentStep.value);
 
     useSignalEffect(() => {
+        setCurrentTutorialLength(tutorialPopup.steps.length);
         setCurrentTutorialStep(currentStep.value);
     });
 
     return <>
-        <div className={'tutorial-container'}>
-            <TutorialPopup
-                content={tutorialPopup.steps[currentTutorialStep].content}
-                position={tutorialPopup.steps[currentTutorialStep].position}/>
-        </div>
+        {tutorialPopup.steps.length > 0 ?
+            <div className={'tutorial-container'}>
+                <TutorialPopup
+                    content={tutorialPopup.steps[currentTutorialStep].content}
+                    position={tutorialPopup.steps[currentTutorialStep].position}/>
+            </div>
+            : ''
+        }
     </>;
 }
 

@@ -9,7 +9,7 @@ const TutorialPopupComponent = (tutorialPopup: ITutorialPopup) => {
 
     useEffect(() => {
         playText(tutorialPopup.content);
-    });
+    }, [tutorialPopup.content]);
 
     return <>
         <div className={["tutorial-popup", `step-${tutorialPopup.position}`].join(' ')}>

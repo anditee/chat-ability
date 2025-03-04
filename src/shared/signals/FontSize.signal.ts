@@ -7,9 +7,11 @@ const MAX_SIZE = 3.0;
 const STEP_SIZE = 0.5;
 
 const increaseFontSize = () => {
+    console.log(fontSize.value);
     if (fontSize.value < MAX_SIZE) {
         fontSize.value = Math.round((fontSize.value + STEP_SIZE) * 100) / 100;
     }
+    console.log(fontSize.value);
 };
 
 const decreaseFontSize = () => {

@@ -29,8 +29,7 @@ const ChatDisplayComponent = (props: IChatDisplay) => {
 
     const [messageGroup, setMessageGroup] = useState<IMessage[][]>([]);
     const [muteIcon, setMuteIcon] = useState<IconDefinition>(faVolumeMute);
-    const [muteText, setMuteText] = useState<string>('Sprachausgabe deaktiviert');
-    const [localFontSize, setLocalFontSize] = useState<number>(0);
+    const [localFontSize, setLocalFontSize] = useState<number>(1);
     const [showChatValue, setShowChatValue] = useState<boolean>(false);
     const [showTutorialValue, setShowTutorialValue] = useState<boolean>(false);
 
@@ -90,11 +89,9 @@ const ChatDisplayComponent = (props: IChatDisplay) => {
         if (currentMuteState && currentMuteState === MuteState.UNMUTED) {
             localStorage.setItem('mute', MuteState.MUTED);
             setMuteIcon(faVolumeHigh);
-            setMuteText('Sprachausgabe aktiviert');
         } else {
             localStorage.setItem('mute', MuteState.UNMUTED);
             setMuteIcon(faVolumeMute);
-            setMuteText('Sprachausgabe deaktiviert');
         }
     }, []);
 
@@ -105,9 +102,7 @@ const ChatDisplayComponent = (props: IChatDisplay) => {
     });
 
     return <>
-        <div
-            className={["chat-display", showChatValue ? ViewState.SHOW : ViewState.HIDE].join(' ')}
-            style={{fontSize: `${localFontSize} rem`}}>
+        <div className={["chat-display", showChatValue ? ViewState.SHOW : ViewState.HIDE, `fs-${localFontSize * 10}rem`].join(' ')}>
             <div className={"chat"}>
                 <div className={"header"}>
                     <div className={"headline"}>
@@ -115,25 +110,25 @@ const ChatDisplayComponent = (props: IChatDisplay) => {
                     </div>
                     <div className={"controls"}>
                         <ChatControl
-                            alternativeDescription={'Textgröße verkleinert'}
+                            alternativeDescription={'Textgröße verkleinern'}
                             key={uuidv4()}
                             onClick={() => decreaseFontSize()}>
                             <FontAwesomeIcon icon={faDownLeftAndUpRightToCenter}/>
                         </ChatControl>
                         <ChatControl
-                            alternativeDescription={'Textgröße vergrößert'}
+                            alternativeDescription={'Textgröße vergrößern'}
                             key={uuidv4()}
                             onClick={() => increaseFontSize()}>
                             <FontAwesomeIcon icon={faUpRightAndDownLeftFromCenter}/>
                         </ChatControl>
                         <ChatControl
-                            alternativeDescription={muteText}
+                            alternativeDescription={'Sprachausgabe deaktivieren oder aktivieren'}
                             onClick={() => disableOrEnableTts()}
                             key={uuidv4()}>
                             <FontAwesomeIcon icon={muteIcon}/>
                         </ChatControl>
                         <ChatControl
-                            alternativeDescription={'Tutorial'}
+                            alternativeDescription={'Anleitung'}
                             onClick={() => showOrHideTutorial()}
                             key={uuidv4()}>
                             <FontAwesomeIcon icon={faQuestionCircle}/>

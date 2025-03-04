@@ -62,3 +62,19 @@
     padding: 1rem 2rem;
     background: #2a2a3a;
 }
+
+.fs-10rem {
+    font-size: 1rem;
+}
+.fs-15rem {
+    font-size: 1.5rem;
+}
+.fs-20rem {
+    font-size: 2rem;
+}
+.fs-25rem {
+    font-size: 2.5rem;
+}
+.fs-30rem {
+    font-size: 3rem;
+}
