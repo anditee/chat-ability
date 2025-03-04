@@ -9,7 +9,7 @@ const ChatControl = (control: IChatControl) => {
             tabIndex={0}
             className={["chat-control"].join(' ')}
             onClick={control.onClick}
-            onBlur={() => playText(control.alternativeDescription)}
+            onFocus={() => playText(control.alternativeDescription)}
             aria-label={control.alternativeDescription}>
             {control.children}
         </button>

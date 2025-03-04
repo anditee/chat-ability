@@ -12,7 +12,7 @@ const TextButtonComponent = (textButton: ITextButton) => {
             aria-label={textButton.alternativeText}
             tabIndex={textButton.tabIndex ?? 0}
             onClick={textButton.onClick}
-            onBlur={() => playText(textButton.alternativeText)}
+            onFocus={() => playText(textButton.alternativeText)}
             type={'button'}
             key={uuidv4()}>
             {textButton.children}
