@@ -4,22 +4,18 @@ import {IChatButton} from "./interfaces/ChatButton.model";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faRobot} from "@fortawesome/free-solid-svg-icons";
 import './ChatButton.css';
-import TextToSpeechService from "../../shared/services/TextToSpeech.service";
-import ChatDisplay from "../ChatDisplay";
 import {showOrHideChat} from "../../shared/signals/ShowChat.signal";
+import {playText, tts} from "../../shared/signals/TextToSpeech.signal";
+import {useSignalEffect} from "@preact/signals-react";
 
 const ChatButtonComponent = (props: IChatButton) => {
 
     const [didUserInteract, setDidUserInteract] = useState<boolean>(false);
     const [didPlayInstructions, setDidPlayInstructions] = useState<boolean>(false);
     const [audioElementSet, setAudioElementSet] = useState<boolean>(false);
-    const [tts] = useState<TextToSpeechService>(new TextToSpeechService());
 
     useEffect(() => {
-        tts.getSpeechByText(props.accessibilityText).then(audioElement => {
-            tts.setAudioElement(audioElement);
-            setAudioElementSet(true);
-        });
+        playText(props.accessibilityText);
     }, [props.accessibilityText]);
 
     useEffect(() => {
@@ -30,13 +26,13 @@ const ChatButtonComponent = (props: IChatButton) => {
         }
     }, [audioElementSet]);
 
-    useEffect(() => {
+    useSignalEffect(() => {
         if (didUserInteract && !didPlayInstructions) {
-            tts.playAudio().then(() => {
+            tts.value.playAudio().then(() => {
                 setDidPlayInstructions(true);
             });
         }
-    }, [didUserInteract, didPlayInstructions]);
+    });
 
     useEffect(() => {
         // register keydown event on load of view service

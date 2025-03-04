@@ -1,18 +1,15 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {ITutorialPopup} from "./interfaces/TutorialPopup.model";
 import './TutorialPopup.css';
-import TextToSpeechService from "../../../../shared/services/TextToSpeech.service";
 import {goToNextStep, showOrHideTutorial} from "../../../../shared/signals/Tutorial.signal";
+import {playText} from "../../../../shared/signals/TextToSpeech.signal";
+import TextButton from "../../../TextButton/TextButton";
 
 const TutorialPopupComponent = (tutorialPopup: ITutorialPopup) => {
-    const [tts] = useState<TextToSpeechService>(new TextToSpeechService());
 
     useEffect(() => {
-        tts.getSpeechByText(tutorialPopup.content).then(audioElement => {
-            tts.setAudioElement(audioElement);
-            tts.playAudio().then();
-        });
-    }, [tutorialPopup.content]);
+        playText(tutorialPopup.content);
+    });
 
     return <>
         <div className={["tutorial-popup", `step-${tutorialPopup.position}`].join(' ')}>
@@ -20,12 +17,12 @@ const TutorialPopupComponent = (tutorialPopup: ITutorialPopup) => {
                 {tutorialPopup.content}
             </div>
             <div className={'tutorial-footer'}>
-                <button className={'cancel'} tabIndex={0} onClick={() => showOrHideTutorial()}>
+                <TextButton alternativeText={'Abbrechen'} onClick={() => showOrHideTutorial()}>
                     Abbrechen
-                </button>
-                <button className={'next-step'} tabIndex={0} onClick={() => goToNextStep()}>
+                </TextButton>
+                <TextButton alternativeText={'nächster Schritt'} onClick={() => goToNextStep()}>
                     Nächster Schritt
-                </button>
+                </TextButton>
             </div>
         </div>
     </>;

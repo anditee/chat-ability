@@ -13,16 +13,12 @@ export function generateDefaultTutorial() {
             position: 2,
         },
         {
-            content: 'Klicken Sie auf das Mikrofonsymbol, um die Spracheingabe zu starten, um sie zu beenden klicken Sie erneut auf das Mikrofonsymbol.',
+            content: 'Klicken Sie auf das Mikrofonsymbol, um die Spracheingabe zu starten. Um sie zu beenden klicken Sie erneut auf das Mikrofonsymbol.',
             position: 3,
         },
         {
-            content: 'Chatnachrichten können auch über das betätigen der Enter-Taste abgesendet werden.',
+            content: 'Nachrichten können auch über das betätigen der Enter-Taste abgesendet werden.',
             position: 4,
-        },
-        {
-            content: '',
-            position: 5,
         },
     ];
 }

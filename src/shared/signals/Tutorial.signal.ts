@@ -13,7 +13,7 @@ const setCurrentTutorialLength = (length: number) => {
 }
 
 const goToNextStep = () => {
-    if (currentStep.value < currentTutorialLength.value) {
+    if (currentStep.value < currentTutorialLength.value - 1) {
         currentStep.value += 1;
     } else {
         currentStep.value = 0;

@@ -9,6 +9,10 @@ class TextToSpeechService {
         this.audioElement = audioElement;
     }
 
+    async pause() {
+        this.audioElement?.pause();
+    }
+
     async playAudio() {
         const currentMuteState = localStorage.getItem('mute') ?? MuteState.UNMUTED;
         const disabled = currentMuteState === MuteState.MUTED;

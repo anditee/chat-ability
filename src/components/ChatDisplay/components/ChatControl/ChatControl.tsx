@@ -1,21 +1,17 @@
 import * as React from "react";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback} from "react";
 import './ChatControl.css';
-import TextToSpeechService from "../../../../shared/services/TextToSpeech.service";
 import {IChatControl} from "../../../../shared/interfaces/ChatControl.model";
+import {playText} from "../../../../shared/signals/TextToSpeech.signal";
 
 const ChatControl = (control: IChatControl) => {
-
-    const [tts] = useState<TextToSpeechService>(new TextToSpeechService());
 
     const generateAndPlayAudio = useCallback(() => {
         if (control.onClick) {
             control.onClick();
         }
-        tts.getSpeechByText(control.alternativeDescription).then(audioElement => {
-            tts.setAudioElement(audioElement);
-            tts.playAudio().then();
-        });
+
+        playText(control.alternativeDescription);
     }, [control.alternativeDescription]);
     return <>
         <button

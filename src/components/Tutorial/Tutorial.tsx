@@ -3,6 +3,7 @@ import {ITutorial} from "./interfaces/Tutorial.model";
 import TutorialPopup from "./components/TutorialPopup/TutorialPopup";
 import {useSignalEffect} from "@preact/signals-react";
 import {currentStep, setCurrentTutorialLength} from "../../shared/signals/Tutorial.signal";
+import "./Tutorial.css";
 
 const TutorialComponent = (tutorialPopup: ITutorial) => {
 
@@ -10,16 +11,18 @@ const TutorialComponent = (tutorialPopup: ITutorial) => {
 
     useEffect(() => {
         setCurrentTutorialLength(tutorialPopup.steps.length);
-    }, [tutorialPopup.steps]);
+    }, []);
 
     useSignalEffect(() => {
         setCurrentTutorialStep(currentStep.value);
     });
 
     return <>
-        <TutorialPopup
-            content={tutorialPopup.steps[currentTutorialStep].content}
-            position={tutorialPopup.steps[currentTutorialStep].position}/>
+        <div className={'tutorial-container'}>
+            <TutorialPopup
+                content={tutorialPopup.steps[currentTutorialStep].content}
+                position={tutorialPopup.steps[currentTutorialStep].position}/>
+        </div>
     </>;
 }
 
