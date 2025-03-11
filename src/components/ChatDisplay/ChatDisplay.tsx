@@ -135,7 +135,7 @@ const ChatDisplayComponent = (props: IChatDisplay) => {
                         </ChatControl>
                     </div>
                 </div>
-                <div className={"inner-container"} key={uuidv4()}>
+                <div className={"inner-container"} key={uuidv4()} aria-live={"assertive"}>
                     {messageGroup.map(messageGroup => (
                         <div className={"message-group"} key={uuidv4()}>
                             {messageGroup.map(message => (

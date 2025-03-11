@@ -2,13 +2,13 @@ import React, {useEffect} from "react";
 import {ITutorialPopup} from "./interfaces/TutorialPopup.model";
 import './TutorialPopup.css';
 import {goToNextStep, showOrHideTutorial} from "../../../../shared/signals/Tutorial.signal";
-import {playText} from "../../../../shared/signals/TextToSpeech.signal";
+import {setTextToPlay} from "../../../../shared/signals/TextToSpeech.signal";
 import TextButton from "../../../TextButton/TextButton";
 
 const TutorialPopupComponent = (tutorialPopup: ITutorialPopup) => {
 
     useEffect(() => {
-        playText(tutorialPopup.content);
+        setTextToPlay(tutorialPopup.content);
     }, [tutorialPopup.content]);
 
     return <>
@@ -20,8 +20,8 @@ const TutorialPopupComponent = (tutorialPopup: ITutorialPopup) => {
                 <TextButton alternativeText={'Abbrechen'} onClick={() => showOrHideTutorial()}>
                     Abbrechen
                 </TextButton>
-                <TextButton alternativeText={'nächster Schritt'} onClick={() => goToNextStep()}>
-                    Nächster Schritt
+                <TextButton alternativeText={'Weiter'} onClick={() => goToNextStep()}>
+                    Weiter
                 </TextButton>
             </div>
         </div>

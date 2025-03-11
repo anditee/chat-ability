@@ -1,7 +1,7 @@
 import * as React from "react";
 import './ChatControl.css';
 import {IChatControl} from "../../../../shared/interfaces/ChatControl.model";
-import {playText} from "../../../../shared/signals/TextToSpeech.signal";
+import {setTextToPlay} from "../../../../shared/signals/TextToSpeech.signal";
 
 const ChatControl = (control: IChatControl) => {
     return <>
@@ -9,7 +9,7 @@ const ChatControl = (control: IChatControl) => {
             tabIndex={0}
             className={["chat-control"].join(' ')}
             onClick={control.onClick}
-            onFocus={() => playText(control.alternativeDescription)}
+            onFocus={() => setTextToPlay(control.alternativeDescription)}
             aria-label={control.alternativeDescription}>
             {control.children}
         </button>

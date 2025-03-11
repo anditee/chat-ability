@@ -5,7 +5,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faRobot} from "@fortawesome/free-solid-svg-icons";
 import './ChatButton.css';
 import {showOrHideChat} from "../../shared/signals/ShowChat.signal";
-import {playText, tts} from "../../shared/signals/TextToSpeech.signal";
+import {setTextToPlay, tts} from "../../shared/signals/TextToSpeech.signal";
 import {useSignalEffect} from "@preact/signals-react";
 
 const ChatButtonComponent = (props: IChatButton) => {
@@ -15,7 +15,7 @@ const ChatButtonComponent = (props: IChatButton) => {
     const [audioElementSet, setAudioElementSet] = useState<boolean>(false);
 
     useEffect(() => {
-        playText(props.accessibilityText);
+        setTextToPlay(props.accessibilityText);
     }, [props.accessibilityText]);
 
     useEffect(() => {

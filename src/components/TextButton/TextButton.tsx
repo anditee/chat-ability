@@ -1,7 +1,7 @@
 import React from "react";
 import "./TextButton.css";
 import {ITextButton} from "./interfaces/TextButton.model";
-import {playText} from "../../shared/signals/TextToSpeech.signal";
+import {setTextToPlay} from "../../shared/signals/TextToSpeech.signal";
 import {v4 as uuidv4} from "uuid";
 
 const TextButtonComponent = (textButton: ITextButton) => {
@@ -12,7 +12,7 @@ const TextButtonComponent = (textButton: ITextButton) => {
             aria-label={textButton.alternativeText}
             tabIndex={textButton.tabIndex ?? 0}
             onClick={textButton.onClick}
-            onFocus={() => playText(textButton.alternativeText)}
+            onFocus={() => setTextToPlay(textButton.alternativeText)}
             type={'button'}
             key={uuidv4()}>
             {textButton.children}

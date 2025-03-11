@@ -1,10 +1,19 @@
 .chat-message {
     display: flex;
     gap: 2rem;
+    align-self: flex-start
+}
+
+.chat-message:focus-visible {
+    border-radius: 4rem 1rem 1rem 4rem;
 }
 
 .chat-message.right {
     align-self: flex-end;
+}
+
+.chat-message.right:focus-visible {
+    border-radius: 1rem 4rem 4rem 1rem;
 }
 
 .chat-message .icon {

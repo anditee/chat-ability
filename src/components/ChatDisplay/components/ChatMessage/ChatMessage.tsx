@@ -4,7 +4,7 @@ import './ChatMessage.css';
 import {IMessage, IMessagePosition, IMessageType} from "../../../../shared/interfaces/Message.model";
 import aiImage from '../../../../assets/images/ai_profile_picture.png';
 import userImage from '../../../../assets/images/profile_picture.png';
-import {playText} from "../../../../shared/signals/TextToSpeech.signal";
+import {setTextToPlay} from "../../../../shared/signals/TextToSpeech.signal";
 
 const ChatMessageComponent = (message: IMessage) => {
 
@@ -21,7 +21,7 @@ const ChatMessageComponent = (message: IMessage) => {
     }, [message.type]);
 
     const generateAndPlayAudio = useCallback(() => {
-        playText(generateSpeechText());
+        setTextToPlay(generateSpeechText());
     }, [message.content, alternativeDescription]);
 
     const generateSpeechText = useCallback(() => {
@@ -33,6 +33,7 @@ const ChatMessageComponent = (message: IMessage) => {
             tabIndex={0}
             className={["chat-message", position].join(' ')}
             onClick={() => generateAndPlayAudio()}
+            onFocus={() => generateAndPlayAudio()}
             onKeyDown={e => e.key === 'Enter' ? generateAndPlayAudio() : ''}>
             <div className={"icon"}>
                 <img src={imgSrc} alt={alternativeDescription}/>

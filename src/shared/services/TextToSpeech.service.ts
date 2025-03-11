@@ -10,7 +10,7 @@ class TextToSpeechService {
     }
 
     async pause() {
-        this.audioElement?.pause();
+        return this.audioElement?.pause();
     }
 
     async playAudio() {
@@ -22,9 +22,13 @@ class TextToSpeechService {
     }
 
     async handleAudioStream(stream: ReadableStream<Uint8Array>) {
-        const audioElement = new Audio();
-        audioElement.src = URL.createObjectURL(new Blob([await this.streamToArrayBuffer(stream)], {type: "audio/mpeg"}));
-        return audioElement;
+        if (!this.audioElement) {
+            this.audioElement = new Audio();
+        }
+
+        this.audioElement.src = URL.createObjectURL(new Blob([await this.streamToArrayBuffer(stream)], {type: "audio/mpeg"}));
+
+        return this.audioElement;
     }
 
     async streamToArrayBuffer(stream: ReadableStream<Uint8Array>) {
