@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useState} from "react";
 import './ChatInput.css';
 import ChatControl from "../ChatControl";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";

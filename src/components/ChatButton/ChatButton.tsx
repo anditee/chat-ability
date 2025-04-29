@@ -51,7 +51,9 @@ const ChatButtonComponent = (props: IChatButton) => {
     const classes = `ca-chat-button ${getButtonPosition()}`
 
     return <>
-        <button className={classes}>
+        <button
+            className={classes}
+            aria-label={props.alternativeText}>
             <FontAwesomeIcon icon={faRobot}/>
         </button>
     </>;

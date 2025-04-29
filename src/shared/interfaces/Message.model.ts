@@ -1,7 +1,6 @@
 export interface IMessage {
     content: string;
     type: IMessageType;
-    position: IMessagePosition;
 }
 
 export enum IMessageType {
