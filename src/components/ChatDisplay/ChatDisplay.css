@@ -1,4 +1,4 @@
-:focus-visible, input:focus-visible, a:focus-visible {
+:focus-visible, :focus, input:focus-visible, a:focus-visible {
     outline: none;
     box-shadow: 0 0 15px 7px rgba(0, 255, 255, 0.5);
     transition: box-shadow 0.2s ease-in-out;
@@ -19,15 +19,19 @@
 
 .chat-display .inner-container {
     overflow-y: auto;
+    flex-grow: 1;
 }
 
 .chat-display .chat {
     width: 80vw;
     max-height: 80vh;
+    min-height: 80vh;
     margin: 2rem auto 0;
     background: #2a2a3a;
     border-radius: 0.25rem;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .chat-display .chat .header {

@@ -4,7 +4,7 @@
     align-self: flex-start
 }
 
-.chat-message:focus-visible {
+.chat-message:focus-visible, .chat-message:focus {
     border-radius: 4rem 1rem 1rem 4rem;
 }
 
@@ -12,7 +12,7 @@
     align-self: flex-end;
 }
 
-.chat-message.right:focus-visible {
+.chat-message.right:focus-visible, .chat-message.right:focus {
     border-radius: 1rem 4rem 4rem 1rem;
 }
 

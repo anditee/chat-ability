@@ -1,12 +1,13 @@
 import * as React from "react";
 import {useCallback, useEffect, useState} from "react";
 import './ChatMessage.css';
-import {IMessage, IMessagePosition, IMessageType} from "../../../../shared/interfaces/Message.model";
+import {IMessagePosition, IMessageProps, IMessageType} from "../../../../shared/interfaces/Message.model";
 import aiImage from '../../../../assets/images/ai_profile_picture.png';
 import userImage from '../../../../assets/images/profile_picture.png';
 import {setTextToPlay} from "../../../../shared/signals/TextToSpeech.signal";
+import ReactMarkdown from 'react-markdown';
 
-const ChatMessageComponent = (message: IMessage) => {
+const ChatMessageComponent = (message: IMessageProps) => {
 
     const [imgSrc, setImgSrc] = useState<string>(aiImage.src);
     const [alternativeDescription, setAlternativeDescription] = useState<string>('Antwort des Chatbots');
@@ -30,16 +31,17 @@ const ChatMessageComponent = (message: IMessage) => {
 
     return <>
         <div
-            tabIndex={0}
+            tabIndex={message.tabIndex ?? 0}
             className={["chat-message", position].join(' ')}
-            onClick={() => generateAndPlayAudio()}
+            onClick={(e) => e.currentTarget.focus()}
             onFocus={() => generateAndPlayAudio()}
-            onKeyDown={e => e.key === 'Enter' ? generateAndPlayAudio() : ''}>
+            onKeyDown={e => e.key === 'Enter' ? generateAndPlayAudio() : ''}
+            ref={message.ref}>
             <div className={"icon"}>
                 <img src={imgSrc} alt={alternativeDescription}/>
             </div>
             <div className={"content"}>
-                {message.content}
+                <ReactMarkdown>{message.content}</ReactMarkdown>
             </div>
         </div>
     </>;

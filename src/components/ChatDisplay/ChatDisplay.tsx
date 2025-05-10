@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {IChatDisplay} from "./interfaces/ChatDisplay.model";
 import './ChatDisplay.css';
 import ChatMessageComponent from "./components/ChatMessage";
@@ -32,49 +32,8 @@ const ChatDisplayComponent = (props: IChatDisplay) => {
     const [localFontSize, setLocalFontSize] = useState<number>(1);
     const [showChatValue, setShowChatValue] = useState<boolean>(false);
     const [showTutorialValue, setShowTutorialValue] = useState<boolean>(false);
-
-    useEffect(() => {
-        setMessageGroup(
-            [
-                [
-                    {
-                        content: 'Hallo! Wie kann ich Ihnen bei Ihrer Studienwahl helfen?',
-                        type: IMessageType.RESPONSE,
-                    },
-                ],
-                [
-                    {
-                        content: 'Ich bin mir nicht sicher, welches Studienfach zu mir passt.',
-                        type: IMessageType.REQUEST,
-                    },
-                    {
-                        content: 'Kein Problem! Welche Fächer interessieren Sie am meisten?',
-                        type: IMessageType.RESPONSE,
-                    },
-                ],
-                [
-                    {
-                        content: 'Ich mag Informatik und Mathematik.',
-                        type: IMessageType.REQUEST,
-                    },
-                    {
-                        content: 'Das klingt spannend! Sie könnten sich Studiengänge wie Informatik, Data Science oder Wirtschaftsinformatik anschauen.',
-                        type: IMessageType.RESPONSE,
-                    },
-                ],
-                [
-                    {
-                        content: 'Welche Karrieremöglichkeiten gibt es in diesen Bereichen?',
-                        type: IMessageType.REQUEST,
-                    },
-                    {
-                        content: 'In diesen Bereichen gibt es viele Möglichkeiten, z. B. als Softwareentwickler, Datenanalyst oder IT-Consultant.',
-                        type: IMessageType.RESPONSE,
-                    },
-                ],
-            ]
-        )
-    }, []);
+    const bottomRef = useRef<HTMLDivElement>(null);
+    const lastMessageRef = useRef<HTMLDivElement | null>(null);
 
     const disableOrEnableTts = useCallback(() => {
         const currentMuteState = localStorage.getItem('mute') ?? MuteState.UNMUTED;
@@ -94,8 +53,15 @@ const ChatDisplayComponent = (props: IChatDisplay) => {
         setShowTutorialValue(showTutorial.value);
     });
 
+    useEffect(() => {
+        bottomRef.current?.scrollIntoView({behavior: 'smooth'});
+        console.log(lastMessageRef);
+        lastMessageRef.current?.focus();
+    }, [messageGroup]);
+
     return <>
-        <div className={["chat-display", showChatValue ? ViewState.SHOW : ViewState.HIDE, `fs-${localFontSize * 10}rem`].join(' ')}>
+        <div
+            className={["chat-display", showChatValue ? ViewState.SHOW : ViewState.HIDE, `fs-${localFontSize * 10}rem`].join(' ')}>
             <div className={"chat"}>
                 <div className={"header"}>
                     <div className={"headline"}>
@@ -129,20 +95,28 @@ const ChatDisplayComponent = (props: IChatDisplay) => {
                     </div>
                 </div>
                 <div className={"inner-container"} key={uuidv4()} aria-live={"assertive"}>
-                    {messageGroup.map(messageGroup => (
-                        <div className={"message-group"} key={uuidv4()}>
-                            {messageGroup.map(message => (
-                                <ChatMessageComponent
-                                    content={message.content}
-                                    type={message.type}
-                                    key={uuidv4()}>
-                                </ChatMessageComponent>
-                            ))}
+                    {messageGroup.map((group, groupIndex) => (
+                        <div className="message-group" key={`group-${groupIndex}`}>
+                            {group.map((message, messageIndex) => {
+                                const isLastGroup = groupIndex === messageGroup.length - 1;
+                                const isLastMessage = messageIndex === group.length - 1;
+                                console.log(isLastGroup, isLastMessage);
+                                return (
+                                    <ChatMessageComponent
+                                        key={`message-${groupIndex}-${messageIndex}`}
+                                        content={message.content}
+                                        type={message.type}
+                                        tabIndex={0}
+                                        ref={isLastGroup && isLastMessage ? lastMessageRef : null}
+                                    />
+                                );
+                            })}
                         </div>
                     ))}
+                    <div ref={bottomRef}/>
                 </div>
                 <div className={"footer"}>
-                    <ChatInput></ChatInput>
+                    <ChatInput messages={messageGroup} addConversationPart={setMessageGroup}></ChatInput>
                 </div>
             </div>
         </div>
