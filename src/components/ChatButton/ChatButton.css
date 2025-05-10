@@ -1,17 +1,36 @@
-.ca-chat-button {
-    border-radius: 100%;
-    background: gray;
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    z-index: 9999;
-    bottom: 1rem;
-}
-
 .ca-chat-button.button-position-left {
     left: 1rem;
 }
 
 .ca-chat-button.button-position-right {
     right: 1rem;
+}
+
+.ca-chat-button  {
+    position: fixed;
+    width: 80px;
+    height: 80px;
+    z-index: 9999;
+    bottom: 1rem;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.ca-chatbot-button:hover {
+    background-color: #1d4ed8;
+    transform: scale(1.05);
+}
+
+.ca-chatbot-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
 }

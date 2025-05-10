@@ -55,7 +55,6 @@ const ChatDisplayComponent = (props: IChatDisplay) => {
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({behavior: 'smooth'});
-        console.log(lastMessageRef);
         lastMessageRef.current?.focus();
     }, [messageGroup]);
 
@@ -100,7 +99,7 @@ const ChatDisplayComponent = (props: IChatDisplay) => {
                             {group.map((message, messageIndex) => {
                                 const isLastGroup = groupIndex === messageGroup.length - 1;
                                 const isLastMessage = messageIndex === group.length - 1;
-                                console.log(isLastGroup, isLastMessage);
+
                                 return (
                                     <ChatMessageComponent
                                         key={`message-${groupIndex}-${messageIndex}`}
